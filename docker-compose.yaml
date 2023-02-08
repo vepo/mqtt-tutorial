@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - 9001:9001
+      - 1883:1883
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+  producer:
+    image: vepo/mqtt/producer
+    environment:
+      MQTT_HOST: mqtt
+      MQTT_USR: user
+      MQTT_PWD: password
+    depends_on:
+      - mqtt
+  consumer:
+    image: vepo/mqtt/consumer
+    environment:
+      MQTT_HOST: mqtt
+      MQTT_USR: user
+      MQTT_PWD: password
+    depends_on:
+      - mqtt
